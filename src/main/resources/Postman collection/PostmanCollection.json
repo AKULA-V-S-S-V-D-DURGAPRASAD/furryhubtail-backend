@@ -1,0 +1,438 @@
+{
+  "info": {
+    "_postman_id": "2a849927-e4b6-4652-b115-464789626baa",
+    "name": "FurryHub - Full API (Auth, Packages, Booking, Cart) - Provider Cancel/Complete",
+    "description": "Postman collection for FurryHub APIs: auth, packages, provider, customer, booking and cart. Base URL: http://localhost:8080. Updated: provider cancels and completes bookings.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "38316423"
+  },
+  "item": [
+    {
+      "name": "Auth - Login Customer",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"cust@example.com\",\n  \"password\": \"password123\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/login",
+          "host": ["{{baseUrl}}"],
+          "path": ["api","auth","login"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Customer login returned token\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('token');",
+              "});",
+              "if (pm.response.code === 200) {",
+              "    var jsonData = pm.response.json();",
+              "    var rawToken = jsonData.token;",
+              "    pm.environment.set('token', rawToken);",
+              "}"
+            ]
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "Auth - Login Provider",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"prov@example.com\",\n  \"password\": \"password123\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/login",
+          "host": ["{{baseUrl}}"],
+          "path": ["api","auth","login"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Provider login returned token\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('token');",
+              "});",
+              "if (pm.response.code === 200) {",
+              "    var jsonData = pm.response.json();",
+              "    var rawToken = jsonData.token;",
+              "    pm.environment.set('token', rawToken);",
+              "}"
+            ]
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "Auth - Register Customer",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"cust@example.com\",\n  \"password\": \"password123\",\n  \"firstName\": \"Rahul\",\n  \"lastName\": \"Malhotra\",\n  \"address\": \"123 Street\",\n  \"phoneNumber\": \"9876543210\",\n  \"latitude\": 19.0760,\n  \"longitude\": 72.8777\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/register/customer",
+          "host": ["{{baseUrl}}"],
+          "path": ["api","auth","register","customer"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Auth - Register Provider",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"prov@example.com\",\n  \"password\": \"password123\",\n  \"firstName\": \"Provider\",\n  \"lastName\": \"One\",\n  \"phoneNumber\": \"9998887777\",\n  \"specialization\": \"Grooming\",\n  \"experience\": 5,\n  \"licenseNumber\": \"LIC123\",\n  \"petStoreName\": \"Furry Store\",\n  \"petClinicLocation\": \"City Center\",\n  \"latitude\": 19.0160,\n  \"longitude\": 72.8180\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/register/provider",
+          "host": ["{{baseUrl}}"],
+          "path": ["api","auth","register","provider"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Auth - Verify Email",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/verify-email?token={{verifyToken}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api","auth","verify-email"],
+          "query": [{ "key": "token", "value": "{{verifyToken}}" }]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Auth - Forgot Password",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/forgot-password?email={{email}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api","auth","forgot-password"],
+          "query": [{ "key": "email", "value": "{{email}}" }]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Auth - Reset Password",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"token\": \"{{resetToken}}\",\n  \"newPassword\": \"newPassword123\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/reset-password",
+          "host": ["{{baseUrl}}"],
+          "path": ["api","auth","reset-password"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Provider - Add Package",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"providerEmail\": \"prov@example.com\",\n  \"name\": \"Dog Grooming Basic\",\n  \"description\": \"Full wash and grooming\",\n  \"price\": 500.00,\n  \"duration\": \"PT1H\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/provider/add",
+          "host": ["{{baseUrl}}"],
+          "path": ["api","provider","add"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Provider - Get All Packages",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/provider/all",
+          "host": ["{{baseUrl}}"],
+          "path": ["api","provider","all"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Provider - Confirm Booking",
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/provider/{{bookingId}}/confirm",
+          "host": ["{{baseUrl}}"],
+          "path": ["api","provider","{{bookingId}}","confirm"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Provider - Cancel Booking",
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/provider/{{bookingId}}/cancel",
+          "host": ["{{baseUrl}}"],
+          "path": ["api","provider","{{bookingId}}","cancel"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Provider - Complete Booking",
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"otp\": \"1234\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/provider/{{bookingId}}/complete",
+          "host": ["{{baseUrl}}"],
+          "path": ["api","provider","{{bookingId}}","complete"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Provider - Delete (delete provider/customer via provider endpoint)",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/provider/{{id}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api","provider","{{id}}"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Customer - Create Booking (authenticated)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/customer/create?packageId={{packageId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api","customer","create"],
+          "query": [
+            { "key": "packageId", "value": "{{packageId}}" }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Customer - Create Pet",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Jack\",\n  \"age\": 2,\n  \"color\": \"blue\",\n  \"weight\": 5,\n  \"breed\": \"shitzu\",\n  \"gender\": \"Male\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/customer/createPet",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "customer", "createPet"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Customer - Get All Pets",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/customer/1/pets",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "customer",  "1", "pets"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Customer - Delete Pet",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/customer/deletePet/{{petId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "customer", "deletePet", "{{petId}}"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Customer - Delete (delete customer)",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/customer/{{id}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api","customer","{{id}}"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Cart - Merge Local Cart",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"items\": [\n    { \"packageId\": 1, \"qty\": 2 },\n    { \"packageId\": 2, \"qty\": 1 }\n  ]\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/cart/merge",
+          "host": ["{{baseUrl}}"],
+          "path": ["api","cart","merge"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Cart - Get Cart",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/cart",
+          "host": ["{{baseUrl}}"],
+          "path": ["api","cart"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Cart - Add Item",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"packageId\": 1,\n  \"qty\": 1\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/cart/add",
+          "host": ["{{baseUrl}}"],
+          "path": ["api","cart","add"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Cart - Clear Cart",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/cart/clear",
+          "host": ["{{baseUrl}}"],
+          "path": ["api","cart","clear"]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080" },
+    { "key": "token", "value": "" },
+    { "key": "customerEmail", "value": "cust@example.com" },
+    { "key": "providerEmail", "value": "prov@example.com" },
+    { "key": "packageId", "value": "1" },
+    { "key": "bookingId", "value": "1" },
+    { "key": "id", "value": "1" },
+    { "key": "itemId", "value": "1" },
+    { "key": "verifyToken", "value": "" },
+    { "key": "resetToken", "value": "" },
+    { "key": "email", "value": "cust@example.com" }
+  ]
+}
