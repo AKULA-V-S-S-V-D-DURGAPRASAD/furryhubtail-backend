@@ -1,0 +1,296 @@
+# FurryHub Pet Services (FurryHubTail)
+
+A comprehensive Spring Boot-based backend application for managing pet services, including grooming, training, veterinary care, pet sitting, adoption, transportation, and breeding services. The application provides RESTful APIs for package management, user authentication, cart functionality, and more.
+
+## Features
+
+- **Package Management**: Create, read, update, and delete service packages categorized by type (grooming, training, vet, sitting, adoption, cab, mating).
+- **User Management**: Authentication and authorization for customers and service providers.
+- **Cart and Booking**: Manage service bookings and cart operations.
+- **WebSocket Support**: Real-time communication for video calls and notifications.
+- **Geospatial Features**: Location-based services using Hibernate Spatial.
+- **Email and SMS Integration**: Notifications via Twilio and Spring Mail.
+
+## Prerequisites
+
+Before running the application, ensure you have the following installed:
+
+- **Java 21** or higher
+- **Maven 3.6+** (or use the included Maven wrapper `./mvnw`)
+- **PostgreSQL 12+** database
+- **Postman** (for API testing)
+
+## Setup Instructions
+
+### 1. Clone the Repository
+
+```bash
+git clone <repository-url>
+cd furryhubtail-main-master-master
+```
+
+### 2. Database Setup
+
+1. Install and start PostgreSQL.
+2. Create a database named `furryhub` (or update `application.properties` accordingly).
+3. Update the database connection details in `src/main/resources/application.properties`:
+
+```properties
+spring.datasource.url=jdbc:postgresql://localhost:5432/furryhub
+spring.datasource.username=your_username
+spring.datasource.password=your_password
+```
+
+### 3. Configure Additional Services (Optional)
+
+- **Twilio**: For SMS notifications, add your Twilio credentials to `application.properties`.
+- **Email**: Configure SMTP settings for email notifications.
+- **JWT**: Ensure JWT secret is set for authentication.
+
+### 4. Build the Application
+
+Use Maven to build the project:
+
+```bash
+./mvnw clean install
+```
+
+Or on Windows:
+
+```cmd
+mvnw.cmd clean install
+```
+
+### 5. Run the Application
+
+Start the Spring Boot application:
+
+```bash
+./mvnw spring-boot:run
+```
+
+The application will start on `http://localhost:8080` by default.
+
+## API Documentation
+
+The application uses Springdoc OpenAPI for API documentation. Once running, access the Swagger UI at:
+
+- **Swagger UI**: `http://localhost:8080/swagger-ui.html`
+- **OpenAPI JSON**: `http://localhost:8080/v3/api-docs`
+
+## Testing APIs with Postman
+
+To test and add service packages to your local instance using Postman, follow these detailed steps. The provided Postman collection includes sample data for each service type.
+
+### 1. Import the Postman Collection
+
+1. Open Postman on your system.
+2. Click on **Import** in the top left corner.
+3. Select **File** from the options.
+4. Navigate to and select `src/main/resources/Postman collection/PackageAPIs.postman_collection.json`.
+5. Click **Import**. The collection named "Package APIs" will appear in your collections sidebar with 9 requests.
+
+### 2. Configure Environment Variables
+
+1. In Postman, click on **Environments** (gear icon) in the left sidebar.
+2. Click **+** to create a new environment named "FurryHub Local".
+3. Add the following variables:
+   - **Variable**: `base_url`, **Initial Value**: `http://localhost:8080`, **Current Value**: `http://localhost:8080`
+   - **Variable**: `package_id`, **Initial Value**: `1`, **Current Value**: `1`
+4. Click **Save**.
+5. Select "FurryHub Local" from the environment dropdown in the top right.
+
+### 3. Start the Application
+
+Ensure the Spring Boot application is running locally:
+- Run `./mvnw spring-boot:run` (or `mvnw.cmd spring-boot:run` on Windows).
+- Confirm it's accessible at `http://localhost:8080`.
+
+### 4. Test Package CRUD Operations
+
+#### Step 4.1: Create Packages for Each Service Type
+
+Use the "Create [Service] Package" requests to add packages. Each request has pre-filled sample data. Select the request, and click **Send**. Expect a 201 Created response with the package details.
+
+1. **Create Grooming Package**
+   - **Request**: POST `{{base_url}}/api/packages`
+   - **Sample Data** (JSON Body):
+     ```json
+     {
+       "name": "Basic Grooming",
+       "description": "A basic grooming package including bath, brush, and nail trim",
+       "price": 50.00,
+       "duration": "PT1H",
+       "type": "grooming"
+     }
+     ```
+   - **Expected Response**: 201 Created, with package ID and details.
+
+2. **Create Training Package**
+   - **Request**: POST `{{base_url}}/api/packages`
+   - **Sample Data**:
+     ```json
+     {
+       "name": "Basic Obedience Training",
+       "description": "Introductory training session covering sit, stay, and leash walking",
+       "price": 75.00,
+       "duration": "PT1H30M",
+       "type": "training"
+     }
+     ```
+
+3. **Create Vet Package**
+   - **Request**: POST `{{base_url}}/api/packages`
+   - **Sample Data**:
+     ```json
+     {
+       "name": "Routine Checkup",
+       "description": "Standard veterinary examination including vaccinations and health screening",
+       "price": 100.00,
+       "duration": "PT45M",
+       "type": "vet"
+     }
+     ```
+
+4. **Create Pet Sitting Package**
+   - **Request**: POST `{{base_url}}/api/packages`
+   - **Sample Data**:
+     ```json
+     {
+       "name": "Overnight Sitting",
+       "description": "Full day and night pet sitting with feeding, walks, and playtime",
+       "price": 120.00,
+       "duration": "PT24H",
+       "type": "sitting"
+     }
+     ```
+
+5. **Create Adoption Package**
+   - **Request**: POST `{{base_url}}/api/packages`
+   - **Sample Data**:
+     ```json
+     {
+       "name": "Adoption Consultation",
+       "description": "Initial consultation and paperwork for pet adoption process",
+       "price": 25.00,
+       "duration": "PT30M",
+       "type": "adoption"
+     }
+     ```
+
+6. **Create Cab Package**
+   - **Request**: POST `{{base_url}}/api/packages`
+   - **Sample Data**:
+     ```json
+     {
+       "name": "Pet Taxi Service",
+       "description": "Safe transportation for your pet to vet or grooming appointments",
+       "price": 40.00,
+       "duration": "PT1H",
+       "type": "cab"
+     }
+     ```
+
+7. **Create Mating Package**
+   - **Request**: POST `{{base_url}}/api/packages`
+   - **Sample Data**:
+     ```json
+     {
+       "name": "Breeding Consultation",
+       "description": "Professional consultation for pet breeding and mating services",
+       "price": 150.00,
+       "duration": "PT1H",
+       "type": "mating"
+     }
+     ```
+
+#### Step 4.2: Retrieve Packages
+
+- **Get All Packages**:
+  - Request: GET `{{base_url}}/api/packages/all`
+  - Expected: 200 OK with a list of all packages, differentiated by `type`.
+
+- **Get Package by ID**:
+  - Request: GET `{{base_url}}/api/packages/{{package_id}}`
+  - Update `package_id` to an existing ID (e.g., 1).
+  - Expected: 200 OK with details of the specific package.
+
+#### Step 4.3: Update a Package (Optional)
+
+- **Update Package**:
+  - Request: PUT `{{base_url}}/api/packages/{{package_id}}`
+  - Set `package_id` to an existing ID.
+  - Sample Data (modify as needed):
+    ```json
+    {
+      "name": "Premium Grooming",
+      "description": "An upgraded grooming package with styling and premium products",
+      "price": 85.00,
+      "duration": "PT1H30M",
+      "type": "grooming"
+    }
+    ```
+  - Expected: 200 OK with updated package details.
+
+#### Step 4.4: Delete a Package (Optional)
+
+- **Delete Package**:
+  - Request: DELETE `{{base_url}}/api/packages/{{package_id}}`
+  - Set `package_id` to an existing ID.
+  - Expected: 204 No Content.
+
+### 5. Troubleshooting
+
+- **404 Not Found**: Ensure the app is running and the URL is correct.
+- **400 Bad Request**: Check the JSON body for required fields (name, description, price, duration, type).
+- **500 Internal Server Error**: Verify database connection and logs in the console.
+- **Authentication Errors**: If endpoints require auth, add Authorization headers as per your security config.
+
+This process allows you to fully test the package management APIs with realistic data for each service type.
+
+### Sample API Usage with cURL
+
+If you prefer cURL over Postman:
+
+```bash
+# Add a Grooming Package
+curl -X POST http://localhost:8080/api/packages \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Basic Grooming",
+    "description": "A basic grooming package including bath, brush, and nail trim",
+    "price": 50.00,
+    "duration": "PT1H",
+    "type": "grooming"
+  }'
+
+# Get All Packages
+curl -X GET http://localhost:8080/api/packages/all
+```
+
+## Project Structure
+
+- `src/main/java/com/furryhub/petservices/`: Main application code
+  - `controller/`: REST controllers (e.g., PackageController)
+  - `service/`: Business logic (e.g., PackageService)
+  - `repository/`: Data access layer
+  - `model/`: JPA entities and DTOs
+  - `config/`: Configuration classes
+- `src/main/resources/`: Application properties and static files
+- `src/test/`: Unit and integration tests
+
+## Contributing
+
+1. Fork the repository.
+2. Create a feature branch.
+3. Commit your changes.
+4. Push to the branch.
+5. Open a Pull Request.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Support
+
+For issues or questions, please open an issue in the repository or contact the development team.
